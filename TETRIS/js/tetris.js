@@ -1,4 +1,4 @@
-import BLOCKS from "./blocks.js"
+import BLOCKS from "./blocks.js";   
 const playground = document.querySelector(".playground > ul");
 
 const GAME_ROWS = 20;
@@ -40,15 +40,16 @@ function prependNewLine() {
     playground.prepend(li);
 }
 
-function renderBlocks(moveType="") {
+function renderBlocks(moveType = "") {
     const { type, direction, top, left } = tempMovingItem;
     const movingBlocks = document.querySelectorAll(".moving");
     movingBlocks.forEach(moving => {
         moving.classList.remove(type, "moving");
-    });
-    BLOCKS[type][direction].forEach(block => {
+    })
+    BLOCKS[type][direction].some(block => {
         const x = block[0] + left;
         const y = block[1] + top;
+        console.log(playground.childNodes[y])
         const target = playground.childNodes[y] ? playground.childNodes[y].childNodes[0].childNodes[x] : null;
         const isAvailable = checkEmpty(target);
         if (isAvailable) {
@@ -60,13 +61,13 @@ function renderBlocks(moveType="") {
                 if(moveType==="top"){
                     seizBlock();
                 }
-            }, 0);
+            }, 0)
             return true;
         }
     });
 
-    tempMovingItem.left = left; // 수정
-    tempMovingItem.top = top; // 수정
+    tempMovingItem.left = MovingItem.left; // 수정
+    tempMovingItem.top = MovingItem.top; // 수정
     tempMovingItem.direction = direction; // 수정
 }
 function seizBlock(){
@@ -92,7 +93,7 @@ function checkEmpty(target) {
 
 function moveBlock(moveType, amount) {
     tempMovingItem[moveType] += amount;
-    renderBlocks();
+    renderBlocks(moveType);
 }
 
 function changeDirection(){
@@ -119,4 +120,5 @@ document.addEventListener("keydown", e => {
         default:
             break;
     }
+    //console.log(e)
 });
